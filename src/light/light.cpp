@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <array>
 
 namespace light {
 
@@ -28,8 +29,8 @@ namespace light {
         buffer.Ptr = source->GetBufferPointer();
         buffer.Size = source->GetBufferSize();
         buffer.Encoding = DXC_CP_UTF8;
-        
-        LPCWSTR args[] = {
+
+        std::array args = {
             L"-E", L"main",          // Entry point
             L"-spirv",
             L"-T", L"ps_6_0",        // Shader model
@@ -41,8 +42,8 @@ namespace light {
         CComPtr<IDxcResult> result;
         compiler->Compile(
             &buffer,
-            args,
-            7,
+            args.data(),
+            (uint32_t)args.size(),
             nullptr,
             IID_PPV_ARGS(&result)
         );
